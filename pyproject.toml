@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wxcode-studio"
+version = "1.0.0"
+description = "Offline WX_CODE generator with a small web interface"
+requires-python = ">=3.11"
+dependencies = ["fastapi==0.162.0", "uvicorn==0.54.0", "python-multipart==0.0.33", "Pillow==13.0.0", "idna==3.20"]
+
+[tool.setuptools]
+packages = ["app"]
+
+[tool.setuptools.package-data]
+app = ["assets/*.png", "static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = ["e2e: requires a browser download (run: playwright install chromium)"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["app", "scripts"]

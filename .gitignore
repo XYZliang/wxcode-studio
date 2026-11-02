@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+native/target/
+# vendor/qbar/ is version-controlled on purpose: the eight runtime files are pinned
+# by runtime.lock.json and verified by SHA-256 at startup, so they ship in the repo
+# instead of being re-downloaded.
+.env
+.pytest_cache/
+.mypy_cache/

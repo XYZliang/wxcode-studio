@@ -1,0 +1,17 @@
+.venv/
+# Build-time normalisation: JNA extracts and maps a small helper .so, which fails on
+# noexec/read-only temp mounts. Keep /tmp writable but never expose it to the internet.
+.pytest_cache/
+COPY vendor/qbar ./vendor/qbar
+**/__pycache__/
+native/target/
+repos/
+native-probe/
+toolchain/
+maven-cache/
+static-python-deps/
+*.log
+*.html
+pasted/
+research/
+docs/drafts/

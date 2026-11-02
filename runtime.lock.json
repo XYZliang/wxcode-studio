@@ -1,0 +1,15 @@
+{
+  "repository": "Haoxiqiang/wechat-re-qrscanner",
+  "commit": "92ca3766c614d135df0b2d20498f642a5ca35a3e",
+  "source_prefix": "android/qbar/src/main/",
+  "files": [
+    {"source": "jniLibs/arm64-v8a/libwechatQrMod.so", "target": "lib/libwechatQrMod.so", "sha256": "cc7612519e68986e5cab185be6ec07946aebc968f4abe2509a5fe6127048b287"},
+    {"source": "jniLibs/arm64-v8a/libXNet.so", "target": "lib/libXNet.so", "sha256": "c1a12a1f4093c4b90241b9d537e8d57976b88ddc52187acdf8659ce21926b36f"},
+    {"source": "jniLibs/arm64-v8a/libopencv_world.so", "target": "lib/libopencv_world.so", "sha256": "2ce2c2b65d7a5e130b300739d101f637ca377f102c7149127bab18fa2e23ff34"},
+    {"source": "jniLibs/arm64-v8a/libc++_shared.so", "target": "lib/libc++_shared.so", "sha256": "814328f0de086ca5841f2c190e11b0f05cd5f06d12c3b1b454e5cc979920f16b"},
+    {"source": "assets/qbar/QBarModels/V1.5.0.26/qbar_detect.xnet", "target": "models/QBarModels/V1.5.0.26/qbar_detect.xnet", "sha256": "8463b75066793d87c853cf0012c61a5e0398f0be96e1971c3ec334625f8c9fb9"},
+    {"source": "assets/qbar/QBarModels/V1.1.0.26/qbar_seg.xnet", "target": "models/QBarModels/V1.1.0.26/qbar_seg.xnet", "sha256": "30a536fa8b35d60bf39ec780259f37b64da8393de54a50fa7d6c71cea58b053d"},
+    {"source": "assets/qbar/QBarModels/V1.1.0.26/qbar_sr.xnet", "target": "models/QBarModels/V1.1.0.26/qbar_sr.xnet", "sha256": "1c0cf8a6971eb2de73b84dc7eed70f08d22f0c09ece5a9d13599516aab646579"},
+    {"source": "assets/qbar/srnet.param", "target": "models/srnet.param", "sha256": "6095aa01ea50fd9780d9abb74e0328f085a2fd92f340f11ea3b6f3bc52646961"}
+  ]
+}
