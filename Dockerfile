@@ -33,6 +33,8 @@ ENV WXCODE_BRIDGE_JAR=/app/native/wxcode-bridge.jar \
     WXCODE_RUNTIME_DIR=/app/vendor/qbar \
     WXCODE_TMP_DIR=/tmp/wxcode \
     LD_LIBRARY_PATH=/app/native/libs \
+    MALLOC_ARENA_MAX=1 \
+    MALLOC_TRIM_THRESHOLD_=65536 \
     PYTHONUNBUFFERED=1
 USER app
 EXPOSE 8000

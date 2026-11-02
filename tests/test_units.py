@@ -63,6 +63,45 @@ def test_logo_is_normalized_to_square_png():
         assert image.format == "PNG" and image.size == (512, 512)
 
 
+def _prepared_pixels(data: bytes) -> Image.Image:
+    return Image.open(BytesIO(prepare_logo(data))).convert("RGB")
+
+
+def test_exif_rotated_jpeg_is_scaled_and_oriented():
+    # Left half red, right half blue; orientation 6 rotates it so red ends up on top.
+    source = Image.new("RGB", (2000, 1000), "blue")
+    source.paste("red", (0, 0, 1000, 1000))
+    exif = Image.Exif()
+    exif[0x0112] = 6
+    data = BytesIO()
+    source.save(data, format="JPEG", quality=95, exif=exif)
+    image = _prepared_pixels(data.getvalue())
+    top, bottom = image.getpixel((256, 150)), image.getpixel((256, 362))
+    assert top[0] > 200 > top[2] and bottom[2] > 200 > bottom[0]
+
+
+def test_transparent_margin_is_cropped_and_opaque_logo_fills_the_box():
+    source = Image.new("RGBA", (1000, 1000), (0, 0, 0, 0))
+    source.paste((255, 0, 0, 255), (450, 450, 550, 550))
+    data = BytesIO()
+    source.save(data, format="PNG")
+    image = _prepared_pixels(data.getvalue())
+    # The 100px artwork stays 100px (thumbnail never upscales), centred on white.
+    assert image.getpixel((256, 256)) == (255, 0, 0)
+    assert image.getpixel((256 - 49, 256)) == (255, 0, 0) and image.getpixel((256 - 52, 256)) == (255, 255, 255)
+    opaque = BytesIO()
+    Image.new("RGBA", (1000, 1000), (0, 255, 0, 255)).save(opaque, format="PNG")
+    filled = _prepared_pixels(opaque.getvalue())
+    assert filled.getpixel((256 - 179, 256)) == (0, 255, 0) and filled.getpixel((256 - 182, 256)) == (255, 255, 255)
+
+
+def test_fully_transparent_logo_is_rejected():
+    data = BytesIO()
+    Image.new("RGBA", (64, 64), (0, 0, 0, 0)).save(data, format="PNG")
+    with pytest.raises(AppError):
+        prepare_logo(data.getvalue())
+
+
 def test_animated_and_oversized_logos_are_rejected():
     frames = BytesIO()
     Image.new("RGB", (32, 32), "red").save(

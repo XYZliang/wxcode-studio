@@ -9,13 +9,13 @@ services:
     # root filesystem makes /tmp noexec and breaks native generation, so keep the
     # root writable and restrict privileges instead.
     tmpfs:
-      - /tmp:size=512m,mode=1777
+      - /tmp:size=128m,mode=1777
     security_opt:
       - no-new-privileges:true
     cap_drop:
       - ALL
     pids_limit: 256
-    mem_limit: 2g
+    mem_limit: 512m
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request,json,sys; d=json.load(urllib.request.urlopen('http://127.0.0.1:8000/api/health',timeout=8)); sys.exit(0 if d.get('status')=='ok' and d.get('runtime_ready') else 1)"]
       interval: 30s

@@ -30,11 +30,18 @@ def prepare_logo(data: bytes) -> bytes:
                     raise AppError("INVALID_LOGO", "Logo 每边不能超过 4096 像素", 400)
                 if getattr(source, "n_frames", 1) != 1:
                     raise AppError("INVALID_LOGO", "请上传静态 Logo，不支持动图", 400)
-                image = ImageOps.exif_transpose(source).convert("RGBA")
-                bounds = image.getchannel("A").getbbox()
+                # Decoded pixels cost 4 bytes each (64 MiB at 4096px), so avoid full-size copies.
+                source.draft(None, (720, 720))  # JPEG only: decode at a reduced DCT scale.
+                ImageOps.exif_transpose(source, in_place=True)
+                image = source
+                if source.mode != "RGBA":
+                    image = source.convert("RGBA")
+                    source.close()
+                bounds = image.getbbox(alpha_only=True)
                 if bounds is None:
                     raise AppError("INVALID_LOGO", "Logo 不能是完全透明的图片", 400)
-                image = image.crop(bounds)
+                if bounds != (0, 0, image.width, image.height):
+                    image = image.crop(bounds)
                 # A 360px square fits inside a 512px circle, retaining all artwork.
                 image.thumbnail((360, 360), Image.Resampling.LANCZOS)
                 canvas = Image.new("RGBA", (512, 512), "white")

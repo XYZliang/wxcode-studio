@@ -73,7 +73,9 @@ class Generator:
     def _native(self, arguments: list[str], work: Path, *, models: bool = False) -> str:
         java_tmp = work / "jvm"
         java_tmp.mkdir(exist_ok=True)
-        return self._run([self.java, "--enable-native-access=ALL-UNNAMED", "-Xmx512m",
+        # Short-lived JVM: most of its memory is the native emulator, not the Java heap.
+        return self._run([self.java, "--enable-native-access=ALL-UNNAMED", "-Xmx48m",
+                          "-XX:+UseSerialGC", "-XX:TieredStopAtLevel=1",
                           f"-Djava.io.tmpdir={java_tmp}", "-Djava.awt.headless=true",
                           "-Dorg.slf4j.simpleLogger.defaultLogLevel=error", "-jar", str(self.jar),
                           str(self.runtime / "lib"), *arguments], work, models=models)
